@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katunzi Eggs Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Combined CSS with consistent color scheme */
+        /* Registration Form Styles */
+        .registration-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1569127959161-2b1297b2d9a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2000;
+            transition: all 0.5s ease;
+        }
+
+        .registration-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #registration-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 20px;
+        }
+
+        #registration-form h3 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            position: relative;
+        }
+
+        #registration-form h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #f8b500;
+        }
+
+        #registration-form label {
+            display: block;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        #registration-form input[type="text"],
+        #registration-form input[type="password"],
+        #registration-form input[type="tel"],
+        #registration-form input[type="email"] {
+            width: 100%;
+            padding: 0.7rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        #registration-form input:focus {
+            outline: none;
+            border-color: #f8b500;
+        }
+
+        .gender-options {
+            margin: 1.2rem 0;
+        }
+
+        .gender-options label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        #registration-form input[type="radio"] {
+            margin-right: 0.5rem;
+            accent-color: #f8b500;
+        }
+
+        #registration-form button {
+            background-color: #f8b500;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        #registration-form button:hover {
+            background-color: #e6a700;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #success-page {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            color: #2ecc71;
+            margin-bottom: 1rem;
+        }
+
+        #user-details {
+            margin-top: 1.5rem;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* Main Website Styles */
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #f8b500;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background-color: #e6a700;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #f8b500;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: #f8b500;
+        }
+
+        .nav-menu {
+            display: flex;
+        }
+
+        .nav-menu li {
+            margin-left: 30px;
+        }
+
+        .nav-menu a {
+            font-weight: 600;
+            color: #333;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #f8b500;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #f8b500;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1569127959161-2b1297b2d9a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* About Section */
+        .about {
+            background-color: #fff;
+        }
+
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-img {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        /* Order Section */
+        .order {
+            background-color: #f9f9f9;
+        }
+
+        .order-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .requirements {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .requirements h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .requirements ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .requirements li {
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: #fff;
+        }
+
+        .contact-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contact-info-item i {
+            font-size: 1.2rem;
+            color: #f8b500;
+            margin-right: 15px;
+            width: 20px;
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-form h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f8b500;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo span {
+            color: #f8b500;
+        }
+
+        .footer-logo p {
+            color: #bbb;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .footer-links h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #f8b500;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            color: #bbb;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: #f8b500;
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #444;
+            border-radius: 50%;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: #f8b500;
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #f8b500;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .scroll-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background-color: #e6a700;
+            transform: translateY(-5px);
+        }
+
+        /* Success Message */
+        .success-message {
+            background-color: #2ecc71;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                background-color: #fff;
+                flex-direction: column;
+                text-align: center;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu li {
+                margin: 0;
+                padding: 15px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content, .contact-content {
+                flex-direction: column;
+            }
+
+            .about-img {
+                margin-bottom: 30px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+
+        /* Test Mode Banner */
+        .test-mode-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #f8b500;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .test-mode-banner button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Registration Form Overlay -->
+    <div class="registration-container" id="registration-container">
+        <!-- Registration Form -->
+        <form id="registration-form">
+            <h3>Create Your Account</h3>
+            <label>Username: <input type="text" id="username" placeholder="Choose a username" required></label>
+            <label>Password: <input type="password" id="password" placeholder="Create a password" required></label>
+            <label>Phone: <input type="tel" id="phone" placeholder="Your phone number"></label>
+            <label>Email: <input type="email" id="email" placeholder="Your email address" required></label>
+            <div class="gender-options">
+                <label>Gender:</label>
+                <label><input type="radio" name="gender" value="male"> Male</label>
+                <label><input type="radio" name="gender" value="female"> Female</label>
+            </div>
+            <button type="button" onclick="submitForm()">Sign Up</button>
+        </form>
+
+        <!-- Success Page -->
+        <div id="success-page">
+            <div class="success-icon">✓</div>
+            <h1>Welcome Aboard!</h1>
+            <p>Your account has been successfully created.</p>
+            <div id="user-details">
+                <h3>Your Details:</h3>
+                <p id="display-username"><strong>Username:</strong> </p>
+                <p id="display-email"><strong>Email:</strong> </p>
+                <p id="display-phone"><strong>Phone:</strong> </p>
+                <p id="display-gender"><strong>Gender:</strong> </p>
+            </div>
+            <button onclick="proceedToWebsite()">Continue to Katunzi Eggs</button>
+        </div>
+    </div>
+
+    <!-- Main Website Content (initially hidden) -->
+    <div id="main-website" style="display: none;">
+        <!-- Header Section -->
+        <header id="header">
+            <div class="container header-container">
+                <div class="logo">
+                    <img src="https://via.placeholder.com/150x50?text=Katunzi" alt="Katunzi Logo">
+                    <h1>Katunzi <span>Eggs</span></h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#order">Order</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="container hero-content">
+                <h2>Fresh & Quality Eggs</h2>
+                <p>Welcome to Katunzi Eggs Management, where we provide the freshest and highest quality eggs for your daily needs. Our eggs are sourced from healthy, free-range chickens raised in a natural environment.</p>
+                <a href="#order" class="btn">Order Now</a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title">About Us</h2>
+
+                <div class="about-content">
+                    <div class="about-img">
+                        <img src="https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80" alt="About Katunzi Eggs">
+                    </div>
+                    <div class="about-text">
+                        <h3>Our Story</h3>
+                        <p>Katunzi Eggs Management was established in 2024 with a mission to provide the highest quality eggs to our customers. We started as a small family business and have grown into a trusted supplier of eggs in the region.</p>
+                        <p>Our chickens are raised in a natural environment, fed with organic feed, and cared for with the highest standards of animal welfare. This ensures that our eggs are not only delicious but also nutritious and healthy.</p>
+                        <p>We take pride in our sustainable farming practices and our commitment to environmental responsibility. Our farm uses renewable energy sources and implements waste management systems to minimize our ecological footprint.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Section -->
+        <section id="order" class="order">
+            <div class="container">
+                <h2 class="section-title">Order Eggs</h2>
+
+                <div class="order-content">
+                    <div class="requirements">
+                        <h3>Order Requirements</h3>
+                        <ul>
+                            <li>Minimum order quantity: 30 eggs (1 tray)</li>
+                            <li>Orders must be placed at least 24 hours in advance</li>
+                            <li>Free delivery for orders above 90 eggs (3 trays) within a 10km radius</li>
+                            <li>Payment methods: Cash on delivery, Mobile money, Bank transfer</li>
+                            <li>Special discounts for bulk orders (above 10 trays)</li>
+                            <li>Customized packaging available for special occasions</li>
+                        </ul>
+                    </div>
+                    <a href="#contact" class="btn">Press Order</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Get In Touch</h3>
+                        <p>Have questions about our eggs or want to place an order? Contact us using the form or through our contact details below.</p>
+                        <div class="contact-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Egg Farm Road, Katunzi, Tanzania</span>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+255 761 720 073</span>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>katunzhosea@gmail.com</span>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Monday - Saturday: 8:00 AM - 6:00 PM</span>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h3>Send Message</h3>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                                <div class="error-message" id="nameError">Please enter your name</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                                <div class="error-message" id="emailError">Please enter a valid email address</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" name="phone" required>
+                                <div class="error-message" id="phoneError">Please enter your phone number</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" required></textarea>
+                                <div class="error-message" id="messageError">Please enter your message</div>
+                            </div>
+
+                            <button type="submit" class="btn">Send Message</button>
+                        </form>
+                        <div class="success-message" id="successMessage">
+                            Your message has been sent successfully! We will get back to you soon.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <h2>Katunzi <span>Eggs</span></h2>
+                        <p>Providing fresh and quality eggs since 2024. Our commitment to excellence ensures that you get the best eggs for your family.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#order">Order</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="#">Egg Supply</a></li>
+                            <li><a href="#">Bulk Orders</a></li>
+                            <li><a href="#">Delivery</a></li>
+                            <li><a href="#">Custom Packaging</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; <span id="year"></span> Katunzi Eggs Management. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Scroll to Top Button -->
+        <div class="scroll-top">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Test Mode Banner -->
+    <div class="test-mode-banner" id="testModeBanner">
+        TEST MODE: Registration will repeat each visit
+        <button onclick="resetRegistration()">Show Registration Again</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Registration Form Functionality
+        function submitForm() {
+            // Get form values
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const gender = document.querySelector('input[name="gender"]:checked')?.value || 'Not specified';
+
+            // Simple validation
+            if(!username || !email) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Display user details
+            document.getElementById('display-username').textContent += username;
+            document.getElementById('display-email').textContent += email;
+            document.getElementById('display-phone').textContent += phone || 'Not provided';
+            document.getElementById('display-gender').textContent += gender;
+
+            // Switch views
+            document.getElementById('registration-form').style.display = 'none';
+            document.getElementById('success-page').style.display = 'block';
+        }
+
+        function proceedToWebsite() {
+            // Hide registration overlay
+            document.getElementById('registration-container').classList.add('hidden');
+            
+            // Show main website
+            document.getElementById('main-website').style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // For testing purposes - don't store registration status
+            // In production, you would use: localStorage.setItem('katunziRegistered', 'true');
+        }
+
+        function resetRegistration() {
+            // Reset registration form
+            document.getElementById('registration-form').style.display = 'block';
+            document.getElementById('success-page').style.display = 'none';
+            document.getElementById('registration-container').classList.remove('hidden');
+            document.getElementById('main-website').style.display = 'none';
+            
+            // Clear form fields
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('email').value = '';
+            document.querySelectorAll('input[name="gender"]').forEach(radio => radio.checked = false);
+        }
+
+        // Main Website JavaScript
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (mobileMenuBtn && navMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
+                mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
+            });
+
+            // Close mobile menu when clicking on a nav link
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                    mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                });
+            });
+        }
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.querySelector('.scroll-top');
+
+        if (scrollTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollTopBtn.classList.add('active');
+                } else {
+                    scrollTopBtn.classList.remove('active');
+                }
+            });
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Dynamic Year in Footer
+        const yearElement = document.getElementById('year');
+        if (yearElement) {
+            yearElement.textContent = new Date().getFullYear();
+        }
+
+        // Form Validation
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const messageInput = document.getElementById('message');
+            const nameError = document.getElementById('nameError');
+            const emailError = document.getElementById('emailError');
+            const phoneError = document.getElementById('phoneError');
+            const messageError = document.getElementById('messageError');
+            const successMessage = document.getElementById('successMessage');
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isValid = true;
+
+                // Validate Name
+                if (nameInput.value.trim() === '') {
+                    nameError.style.display = 'block';
+                    nameInput.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    nameError.style.display = 'none';
+                    nameInput.style.borderColor = '#ddd';
+                }
+
+                // Validate Email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailInput.value.trim())) {
+                    emailError.style.display = 'block';
+                    emailInput.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    emailError.style.display = 'none';
+                    emailInput.style.borderColor = '#ddd';
+                }
+
+                // Validate Phone
+                const phoneRegex = /^\+?[0-9]{10,15}$/;
+                if (!phoneRegex.test(phoneInput.value.trim())) {
+                    phoneError.style.display = 'block';
+                    phoneInput.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    phoneError.style.display = 'none';
+                    phoneInput.style.borderColor = '#ddd';
+                }
+
+                // Validate Message
+                if (messageInput.value.trim() === '') {
+                    messageError.style.display = 'block';
+                    messageInput.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    messageError.style.display = 'none';
+                    messageInput.style.borderColor = '#ddd';
+                }
+
+                // If form is valid, submit it
+                if (isValid) {
+                    // In a real application, you would send the form data to a server here
+                    // For this example, we'll just show a success message
+                    contactForm.reset();
+                    successMessage.style.display = 'block';
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 5000);
+                }
+            });
+
+            // Clear error messages when user starts typing
+            if (nameInput) nameInput.addEventListener('input', () => {
+                nameError.style.display = 'none';
+                nameInput.style.borderColor = '#ddd';
+            });
+
+            if (emailInput) emailInput.addEventListener('input', () => {
+                emailError.style.display = 'none';
+                emailInput.style.borderColor = '#ddd';
+            });
+
+            if (phoneInput) phoneInput.addEventListener('input', () => {
+                phoneError.style.display = 'none';
+                phoneInput.style.borderColor = '#ddd';
+            });
+
+            if (messageInput) messageInput.addEventListener('input', () => {
+                messageError.style.display = 'none';
+                messageInput.style.borderColor = '#ddd';
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // For testing purposes - always show registration form on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // In production, you would check registration status here
+            // For testing, we'll always show the registration form
+            document.getElementById('registration-container').style.display = 'flex';
+            document.getElementById('main-website').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
